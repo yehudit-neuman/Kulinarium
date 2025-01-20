@@ -17,6 +17,6 @@ app.use("/api/course",coursRouter)
 app.use("/api/student",studentRouter)
 app.use("/api/reg",regRouter)
 let port=process.env.PORT
-app.listen(port,"localhost",()=>{
+app.listen(port,()=>{
     console.log("app is listening on port "+port)
 })
