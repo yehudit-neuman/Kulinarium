@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API CRUD Operations</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            text-align: right;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        h2 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>פעולות CRUD עבור API</h1>
+
+    <!-- Course Table -->
+    <h2>Course API CRUD</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>crud</th>
+                <th>כתובת</th>
+                <th>פרמטרים</th>
+                <th>Body</th>
+                <th>מה עושה</th>
+                <th>איזה סוגי שגיאות יכולות לחזור</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>get</td>
+                <td>api/course</td>
+                <td>-</td>
+                <td>-</td>
+                <td>מחזירה את כל הקורסים</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>get</td>
+                <td>api/course/id</td>
+                <td>id</td>
+                <td>-</td>
+                <td>מחזירה את הקורס לפי id</td>
+                <td>הid שהתקבל כפרמטר לא קיים בDB</td>
+            </tr>
+            <tr>
+                <td>delete</td>
+                <td>api/course/id</td>
+                <td>id</td>
+                <td>-</td>
+                <td>מוחקת קורס לפי id ומחזירה את הקורס שנמחק</td>
+                <td>הid שהתקבל כפרמטר לא קיים בDB</td>
+            </tr>
+            <tr>
+                <td>put</td>
+                <td>api/course/id</td>
+                <td>id</td>
+                <td>Name, price, שאר השדות של course</td>
+                <td>מעדכנת את הקורס לפי id ומחזירה את הקורס המעודכן</td>
+                <td>שם לעדכון קצר מ3 תווים, מחיר לעדכון קטן מ400, Id לעדכון לא קיים בDB</td>
+            </tr>
+            <tr>
+                <td>post</td>
+                <td>api/course</td>
+                <td>-</td>
+                <td>Name, teachersNames, שאר השדות של course</td>
+                <td>מוסיפה קורס חדש לDB ומחזירה את הקורס החדש</td>
+                <td>לא נשלח name או teachersNames, teachersNames נשלח כמערך ריק, שם קצר מ3 תווים, מחיר לעדכון קטן מ400</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Student Table -->
+    <h2>Student API CRUD</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>crud</th>
+                <th>כתובת</th>
+                <th>פרמטרים</th>
+                <th>Body</th>
+                <th>מה עושה</th>
+                <th>איזה סוגי שגיאות יכולות לחזור</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>get</td>
+                <td>api/student</td>
+                <td>-</td>
+                <td>-</td>
+                <td>מחזירה את כל התלמידים ללא הסיסמאות</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>get</td>
+                <td>api/student/id</td>
+                <td>id</td>
+                <td>-</td>
+                <td>מחזירה תלמיד מסוים על פי הid אם קיים ללא הסיסמה</td>
+                <td>לא קיים תלמיד בid המתקבל</td>
+            </tr>
+            <tr>
+                <td>put</td>
+                <td>api/student/id</td>
+                <td>id</td>
+                <td>Email, username, Role, registratinDate</td>
+                <td>מעדכנת תלמיד על פי הid בתנאי שלא מנסים לעדכן סיסמה ומחזירה את התלמיד המעודכן</td>
+                <td>השם לעדכון קצר מ3 תווים, ניסו לעדכן סיסמה, התפקיד לא היה "משתמש"/ "מנהל", התלמיד לעדכון לא נמצא בdb</td>
+            </tr>
+            <tr>
+                <td>put</td>
+                <td>api/student/password/id</td>
+                <td>id</td>
+                <td>Password only</td>
+                <td>מעדכנת את סיסמת התלמיד על פי הid לסיסמה שהתקבלה בbody ומחזירה את התלמיד המעודכן ללא הסיסמה</td>
+                <td>לא התקבלה הסיסמה לעדכון, אורך סיסמה קצר מ8 תווים, נשלחו שדות לעדכון מלבד הסיסמה, התלמיד לעדכון לא נמצא בdb</td>
+            </tr>
+            <tr>
+                <td>post</td>
+                <td>api/student</td>
+                <td>-</td>
+                <td>username, password, Email, Role, registratinDate</td>
+                <td>מוסיפה תלמיד חדש לdb בתנאי שהוא לא קיים עד כה בdb ומחזירה אותו</td>
+                <td>חסר password, username, השם לעדכון קצר מ3 תווים, אורך סיסמה קצר מ8 תווים, תלמיד זהה קיים כבר בdb</td>
+            </tr>
+            <tr>
+                <td>post</td>
+                <td>api/student/login</td>
+                <td>-</td>
+                <td>username, password</td>
+                <td>מחזירה תלמיד על פי סיסמה ושם שהתקבלו בצורה מאובטחת-body</td>
+                <td>לא התקבלו שם או סיסמה, לא נמצא תלמיד עם השם והסיסמה שהתקבלו</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Registration Table -->
+    <h2>Registration API CRUD</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>crud</th>
+                <th>כתובת</th>
+                <th>פרמטרים</th>
+                <th>Body</th>
+                <th>מה עושה</th>
+                <th>איזה סוגי שגיאות יכולות לחזור</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>get</td>
+                <td>api/reg</td>
+                <td>-</td>
+                <td>-</td>
+                <td>מחזירה את כל הרישומים לקורסים</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>get</td>
+                <td>api/reg/id</td>
+                <td>id</td>
+                <td>-</td>
+                <td>מחזירה את כל הרישומים של תלמיד מסוים על פי הid אם קיימים כאלה</td>
+                <td>לא קיימים רישומים, לא קיים תלמיד בid המתקבל</td>
+            </tr>
+            <tr>
+                <td>delete</td>
+                <td>api/reg/id</td>
+                <td>id</td>
+                <td>-</td>
+                <td>מבטלת רישום על פי הid בתנאי שהוא עדיין לא הושלם בהצלחה ומחזירה את הרישום המבוטל</td>
+                <td>הid שנשלח לא בתבנית תקינה של id בmongoose, לא נמצא רישום עם הid המתקבל, הרישום הושלם בהצלחה ולא ניתן לבטלו</td>
+            </tr>
+            <tr>
+                <td>put</td>
+                <td>api/reg/id</td>
+                <td>id</td>
+                <td>isSuccessfullyCompleted</td>
+                <td>מעדכנת את סטאטוס הרישום על פי הid לפרמטר שהתקבל בbody ומחזירה את הרישום המעודכן</td>
+                <td>הid שנשלח לא בתבנית תקינה של id בmongoose, לא נשלח בbody isSuccessfullyCompleted, לא נמצא רישום עם הid המתקבל</td>
+            </tr>
+            <tr>
+                <td>post</td>
+                <td>api/reg</td>
+                <td>-</td>
+                <td>studentId, courses, שאר השדות שבמודל</td>
+                <td>מוסיפה רישום חדש לdb בתנאי שהוא חוקי מכל בחינה ומחזירה אותו</td>
+                <td>חסר studentId, courses, courses מערך ריק, לא כל הקורסים מכילים coursid, לא כל הקורסים קיימים , studentId שנשלח לא שייך לתלמיד בdb</td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>

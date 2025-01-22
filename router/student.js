@@ -6,7 +6,7 @@ router.get("/",getAllStudents)
 router.get("/:id",getStudentById)
 router.post("/",addStudent_signUp)
 router.put("/:id",updateStudentById)
-router.put("/:id" ,updateStudentPasswordById)
+router.put("/password/:id" ,updateStudentPasswordById)
 router.post("/login" ,getStudetByUserNamePassword_Login)
 
 export default router;

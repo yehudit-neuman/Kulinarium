@@ -4,7 +4,7 @@ import { registrationeModel } from "../model/registration.js"
 import { studentModel } from "../model/student.js"
 import { courseModel } from "../model/course.js"
 
-export const getAllRegistrations = async (req, res) => {
+export const getAllRegistrations = async (req, res) => {//מחזירה את כל הרישומים לקורסים	
 
     try {
         let data = await registrationeModel.find();
@@ -16,11 +16,13 @@ export const getAllRegistrations = async (req, res) => {
 }
 
 
-export const addRegistration = async (req, res) => {
+export const addRegistration = async (req, res) => {//מוסיפה רישום חדש לdb בתנאי שהוא חוקי מכל בחינה ומחזירה אותו	
     let { body } = req;
     if (!body.studentId || !body.courses || body.courses.length == 0)
         return res.status(400).json({ title: "cant add registration", message: "required details are missing" })
     try {
+        //בדיקה בעבור כל קורס האם הוא מכיל id 
+        //והאם הוא קיים בDB החזרת שגיאות בהתאם
         for (const course of body.courses) {
             if (!course.courseId) {
                 return res.status(400).json({
@@ -48,15 +50,16 @@ export const addRegistration = async (req, res) => {
         return res.status(400).json({ title: "cant add registration", message: err.message })
     }
 }
-export const cancelRegistration = async (req, res) => {
+
+export const cancelRegistration = async (req, res) => {//מבטלת רישום על פי הid בתנאי שהוא עדיין לא הושלם בהצלחה ומחזירה את הרישום המבוטל	
     let { id } = req.params
     if (!mongoose.isValidObjectId)
         return res.status(500).json({ Title: "caanot cancel registration", message: "the id you sent was not valid" })
     try {
-
         let registration = await registrationeModel.findById(id)
         if (!registration)
             return res.status(404).json({ Title: "caanot cancel registration", message: "the id you sent was not found" })
+        //אם הרישום לקורס הושלם סופית לא ניתן לבטל רישום
         if (registration.isSuccessfullyCompleted)
             return res.status(404).json({ Title: "caanot cancel registration", message: "the registration isSuccessfullyCompleted" })
         await registration.deleteOne()
@@ -66,7 +69,7 @@ export const cancelRegistration = async (req, res) => {
         return res.status(400).json({ Title: "caanot cancel registration", message: err.message })
     }
 }
-export const getregistrationsByStudentId = async (req, res) => {
+export const getregistrationsByStudentId = async (req, res) => {//מחזירה את כל הרישומים של תלמיד מסוים על פי הid אם קיימים כאלה	
     let { id } = req.params
     try {
         let registrations = await registrationeModel.find({ studentId: id })
@@ -78,7 +81,8 @@ export const getregistrationsByStudentId = async (req, res) => {
         return res.status(400).json({ Title: "caanot get all registrations By studentId", message: err.message })
     }
 }
-export const updateIsSuccessfullyCompleted=async (req,res)=>{
+
+export const updateIsSuccessfullyCompleted=async (req,res)=>{//מעדכנת את סטאטוס הרישום על פי הid לפרמטר שהתקבל בbody ומחזירה את הרישום המעודכן	
     let {id}=req.params
     if(!mongoose.isValidObjectId)
         return res.status(500).json({ Title: "caanot updateIsSuccessfullyCompleted", message:"the id you sent was not valid"})
